@@ -25,8 +25,8 @@ def create_src_dest(match, kp_list, i, j):
     kp1 = kp_list[i]
     kp2 = kp_list[j]
     #Reshaping the points so that they can be normalized
-    src_pts = np.float32([ kp1[q.queryIdx].pt for q in match[0] ]).reshape(-1,1,2)
-    dst_pts = np.float32([ kp2[t.trainIdx].pt for t in match[1] ]).reshape(-1,1,2)
+    src_pts = np.float32([kp1[q[0].queryIdx].pt for q in match ]).reshape(-1,1,2)
+    dst_pts = np.float32([kp2[t[0].trainIdx].pt for t in match ]).reshape(-1,1,2)
     src = np.reshape(src_pts,(np.shape(src_pts)[0],2))
     dst = np.reshape(dst_pts,(np.shape(dst_pts)[0],2))
     return src, dst

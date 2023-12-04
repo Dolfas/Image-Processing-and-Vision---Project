@@ -57,37 +57,11 @@ def create_sequential_homographies(matches, sift_points):
         src_pts = np.float32([ kp_src[:,q] for q in match[0,:]])
         dst_pts = np.float32([ kp_src[:,q] for q in match[0,:]])
 
-
-
-
-
         H_parameters, inliers = RANSAC(src_pts, dst_pts, 50, 0.8)
 
         H=np.transpose(np.array([i+1, i+2, H_parameters]))
         H_sequential = np.hstack([H_sequential, H])
     return H_sequential
-    
-def parse_points(config_data):
-    """ Parse the points from the configuration file """
-    line_map = config_data[1].split('   ')
-    print(line_map)
-    line_frame = config_data[2].split('   ')
-    i = 2
-    match_img = []
-    match_map = []
-    size = len(line_map)
-    while (size > i):
-        #if (i+1 < size):
-        match_img.append((line_map[i].strip(), line_map[i+1].strip()))
-        match_map.append((line_map[i].strip(), line_map[i+1].strip()))
-        i+=2
-    print("image matches: ", match_img)
-    print("map matches: ", match_map)
-    # return match_img, match_map
-    # match_img_map = []
-    # for i in range(1, len(config_data)):
-    #     match_img_map.append(config_data[i].split(' ')[1].strip())
-    # return match_img_map
 
 if __name__ == "__main__":
 
@@ -101,17 +75,17 @@ if __name__ == "__main__":
     print("Condition: ", np.linalg.cond(H_frame1_to_map), '\n')
     
     sift_points, kp_list, img1, img2 = extract_features(video_path)
-    #homography_two_frames(img1, img2, sift_points, kp_list, 1) #option 1 - with openCV; option 2 - with numpy
+    homography_two_frames(img1, img2, sift_points, kp_list, 2) #option 1 - with openCV; option 2 - with numpy
     
-    match2 = matching_features_SCIKITLEARN(sift_points)
-    print(match2)
+    #match2 = matching_features_SCIKITLEARN(sift_points)
+    #print(match2)
     
-    H_sequential = create_sequential_homographies(match2, sift_points)
+    #H_sequential = create_sequential_homographies(match2, sift_points)
 
-    matrix_H = create_all_homographies(match2, kp_list)
-    output_file_path = 'path/file_for_transforms.ext'
-    with open(output_file_path, 'wb') as file:
-        pickle.dump(matrix_H, file)
+    #matrix_H = create_all_homographies(match2, kp_list)
+    #output_file_path = 'path/file_for_transforms.ext'
+    #with open(output_file_path, 'wb') as file:
+        #pickle.dump(matrix_H, file)
     
 # Condition -> A*A^(-1) - High condition means small changes in the input can result in large changes in the output
 
